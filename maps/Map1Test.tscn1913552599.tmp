@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://cf3ltbjokykvg" path="res://script/enemy.gd" id="2_enemy"]
 [ext_resource type="Texture2D" uid="uid://4d0r80pjik4s" path="res://3booodpro's First Asset/Separated/Slime.png" id="2_rp23u"]
 [ext_resource type="Texture2D" uid="uid://b3yelpjta0lxd" path="res://3booodpro's First Asset/TilesetSheet.png" id="3_bgdju"]
-[ext_resource type="Script" uid="uid://dak1y3fu5dkv4" path="res://script/player.gd" id="3_player"]
+[ext_resource type="Script" path="res://script/player_controller.gd" id="3_player"]
 [ext_resource type="Texture2D" uid="uid://v36inwrph0h7" path="res://3booodpro's First Asset/Separated/Ground.png" id="4_h17if"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
@@ -263,6 +263,7 @@ z_index = 1
 position = Vector2(150, 150)
 up_direction = Vector2(0, 1)
 script = ExtResource("3_player")
+speed = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 position = Vector2(17.5, 16)

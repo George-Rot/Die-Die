@@ -77,7 +77,7 @@ SLIME:
 ## Arquivos Modificados
 
 ```
-script/player_controller.gd  # Detecção de colisão
+script/player.gd            # Detecção de colisão
 scenes/batalha_slime.tscn    # Interface de batalha
 scenes/batalha_slime.gd      # Lógica de batalha
 maps/Map1Test.gd            # Reset de triggers

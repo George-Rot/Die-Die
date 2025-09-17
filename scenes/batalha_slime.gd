@@ -1,11 +1,13 @@
 extends Control
 
 # Battle player instance with real stats
-var battle_player: Player
-var player_hp = 100
-var player_max_hp = 100
-var enemy_hp = 50
-var enemy_max_hp = 50
+
+var battle_player = GameManager.player
+var act_enemy = GameManager.enemy
+var player_hp : int
+var player_max_hp : int
+var enemy_hp : int
+var enemy_max_hp : int 
 
 var enemy_attack = 15
 var is_defending = false

@@ -2,7 +2,7 @@
 
 ## Implementações Realizadas
 
-### Player (script/player_controller.gd)
+### Player (script/player.gd)
 - **Movimentação suave** usando CharacterBody2D e move_and_slide()
 - **Controles**: WASD ou setas direcionais
 - **Animações**: 
@@ -43,14 +43,14 @@ maps/
   Map1Test.gd        # Script da cena (inicialização)
 
 script/
-  player_controller.gd  # Lógica do player com colisões
-  enemy.gd             # Lógica do enemy com rebote
+  player.gd           # Lógica do player com colisões
+  enemy.gd           # Lógica do enemy com rebote
 ```
 
 ### Estrutura da Cena
 ```
 SimpleMap1Test (Node2D)
-├── Player (CharacterBody2D) - com script player_controller.gd
+├── Player (CharacterBody2D) - com script player.gd
 │   ├── CollisionShape2D
 │   ├── Camera2D
 │   └── AnimatedSprite2D

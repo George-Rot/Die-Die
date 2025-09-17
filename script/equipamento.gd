@@ -7,7 +7,7 @@ var agilidade: int
 var inteligencia: int
 var raridade: int
 
-func new(forc: int, vit: int, agil: int, inte: int, rar: int):
+func _init(forc: int, vit: int, agil: int, inte: int, rar: int):
 	vitalidade = vit
 	forca = forc
 	agilidade = agil

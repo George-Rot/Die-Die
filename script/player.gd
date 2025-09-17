@@ -8,35 +8,71 @@ var overshield: int
 var vida: int
 var equip : loadout
 
-@export var speed : int = 400
-@onready var sprite := $PlayerSprite
+@export var speed : int = 200
+@onready var sprite := $AnimatedSprite2D
+var can_battle = true  # Prevent multiple battle triggers
 
-func animate():
-	if position.x > 0:
-		sprite.play("right")
-	elif velocity.x < 0:
-		sprite.play("left")
-	elif velocity.y > 0:
-		sprite.play("down")
-	elif velocity.y < 0:
-		sprite.play("up")
+func _ready():
+	print("Player _ready() chamado!")
+	if speed == 0 or speed == null:
+		speed = 200  # Garantir um valor válido
+	print("Speed configurado: ", speed)
+	sprite.play("idle")
+
+func _physics_process(_delta):
+	handle_movement()
+	handle_animation()
+
+func handle_movement():
+	# Resetar velocidade
+	velocity = Vector2.ZERO
+	
+	# Capturar input
+	if Input.is_action_pressed("move_right") or Input.is_key_pressed(KEY_D):
+		velocity.x += 1
+	if Input.is_action_pressed("move_left") or Input.is_key_pressed(KEY_A):
+		velocity.x -= 1
+	if Input.is_action_pressed("move_down") or Input.is_key_pressed(KEY_S):
+		velocity.y += 1
+	if Input.is_action_pressed("move_up") or Input.is_key_pressed(KEY_W):
+		velocity.y -= 1
+	
+	# Normalizar diagonal para manter velocidade consistente
+	if velocity.length() > 0:
+		velocity = velocity.normalized() * speed
+	
+	# Usar move_and_slide() para movimento suave com colisões automáticas
+	move_and_slide()
+	
+	# Check for collisions with other CharacterBody2D (like enemies)
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		if collider is Enemy and can_battle:
+			print("Player colidiu com o enemy! Iniciando batalha...")
+			can_battle = false
+# Salva dados no singleton antes de trocar de cena
+			GameManager.player = self  # ou self.get_status() se quiser só os stats
+			GameManager.enemy = collider
+
+			get_tree().change_scene_to_file("res://scenes/batalha_slime.tscn")
+
+func handle_animation():
+	# Animar baseado na velocidade
+	if velocity.length() > 0:
+		sprite.play("walk")
+		# Flip sprite baseado na direção horizontal
+		if velocity.x > 0:
+			sprite.flip_h = false
+		elif velocity.x < 0:
+			sprite.flip_h = true
 	else:
-		sprite.stop()
+		# Idle animation when stopped
+		sprite.play("idle")
 
-func get_8way_input():
-	var input_direction = Input.get_vector("left", "right", "up", "down")
-	velocity = input_direction * speed
-	
-func move_8way(delta):
-	get_8way_input()
-	animate()
-	#move_and_slide()
-	var collision_info := move_and_collide(velocity*delta)
-	if collision_info:
-		#print(collision_info.get_normal())
-		velocity = velocity.bounce(collision_info.get_normal())
-		move_and_collide(velocity * delta * 10)
-	
+func reset_battle_trigger():
+	can_battle = true
+
 
 
 
@@ -50,13 +86,13 @@ func trocar_arma(nova_arma: equipamento):
 
 func trocar_armadura(nova_armadura: armadura):
 	if equip.armour != null:
-		vitalidade -= equip.armadura.vitalidade
-		overshield -= equip.armadura.overshield
-	equip.armadura = nova_armadura
+		vitalidade -= equip.armour.vitalidade
+		overshield -= equip.armour.overshield
+	equip.armour = nova_armadura
 	vitalidade += nova_armadura.vitalidade
 	overshield += nova_armadura.overshield
 
-func _init(tipo: int):
+func _init(tipo: int = 0):
 	match tipo:
 		0:
 			vitalidade = 12

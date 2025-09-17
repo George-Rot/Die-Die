@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://fep85xh1qvc3"]
+[gd_scene load_steps=6 format=3 uid="uid://fep85xh1qvc3"]
 
 [ext_resource type="Texture2D" uid="uid://csfaq7dn1a7to" path="res://3booodpro's First Asset/Daco_289855.png" id="1_fu0ps"]
-[ext_resource type="Script" uid="uid://bdwewcrpeylfq" path="res://scenes/batalha_slime.gd" id="2_battle"]
 [ext_resource type="Texture2D" uid="uid://cypc8w4kdp22g" path="res://3booodpro's First Asset/—Pngtree—blue slime in pixel art_15588348.png" id="3_a420b"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_player"]
@@ -33,7 +32,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_battle")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
