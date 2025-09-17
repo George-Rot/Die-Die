@@ -7,10 +7,34 @@ var agilidade: int
 var overshield: int
 var vida: int
 var equip : loadout
+var tipo : int
 
 @export var speed : int = 200
 @onready var sprite := $AnimatedSprite2D
 var can_battle = true  # Prevent multiple battle triggers
+
+func setTtipo(tip: int):
+	match tip:
+		0:
+			vitalidade = 15
+			forca = 10
+			agilidade = 6
+			overshield = 0
+			vida = vitalidade * 10  # Vida real baseada na vitalidade
+		1:
+			vitalidade = 8
+			forca = 10
+			agilidade = 14
+			overshield = 5
+			vida = vitalidade * 10  # Vida real baseada na vitalidade
+		2:
+			# Valores padrão para outros tipos
+			vitalidade = 6
+			forca = 12
+			agilidade = 20
+			overshield = 8
+			vida = vitalidade * 10  # Vida real baseada na vitalidade
+	return 0
 
 func _ready():
 	print("Player _ready() chamado!")
@@ -49,10 +73,30 @@ func handle_movement():
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
 		if collider is Enemy and can_battle:
+			# Verificar se o inimigo está visível e ativo
+			if not collider.visible or not collider.process_mode == Node.PROCESS_MODE_INHERIT:
+				print("Inimigo invisível ou inativo, ignorando colisão")
+				continue
+			
 			print("Player colidiu com o enemy! Iniciando batalha...")
+			print("Player stats antes da batalha: Vit %d, For %d, Agi %d" % [vitalidade, forca, agilidade])
+			
+			# Verificar se este inimigo já foi derrotado
+			var enemy_id = collider.enemy_id
+			if GameManager.is_enemy_defeated(enemy_id):
+				print("Inimigo já foi derrotado, ignorando colisão")
+				continue
+			
 			can_battle = false
-# Salva dados no singleton antes de trocar de cena
-			GameManager.player = self  # ou self.get_status() se quiser só os stats
+			
+			# Salvar posição atual antes da batalha
+			GameManager.save_battle_position(global_position)
+			
+			# Salvar ID do inimigo que será enfrentado
+			GameManager.current_enemy_id = enemy_id
+			
+			# Salva dados no singleton antes de trocar de cena
+			GameManager.save_player_for_battle(self)
 			GameManager.enemy = collider
 
 			get_tree().change_scene_to_file("res://scenes/batalha_slime.tscn")
@@ -92,38 +136,22 @@ func trocar_armadura(nova_armadura: armadura):
 	vitalidade += nova_armadura.vitalidade
 	overshield += nova_armadura.overshield
 
-func _init(tipo: int = 0):
-	match tipo:
-		0:
-			vitalidade = 12
-			forca = 12
-			agilidade = 6
-			overshield = 4
-			vida = vitalidade
-		1:
-			vitalidade = 8
-			forca = 10
-			agilidade = 13
-			overshield = 5
-			vida = vitalidade
-		_:
-			# Valores padrão para outros tipos
-			vitalidade = 10
-			forca = 10
-			agilidade = 10
-			overshield = 0
-			vida = vitalidade
-
-func ataque_L():
-	var chance = (agilidade * 2 - agilidade)
+func ataque_L(agilInimigo: int):
+	var chance = (agilidade * agilidade/2 - agilidade)
 	var roll = randf_range(0, chance)
 	if roll >= 20:
-		var dano = (forca * (roll / 20))
+		var dano = ((forca/2) * (roll / 20))
+		print(dano)
+		print(roll)
 		return dano
 	return 0
 
-func ataque_P():
-	return forca + (forca * 0.5)
+func ataque_P(agilInimigo : int):
+	var chanceDeEsquiva = agilInimigo * 0.1
+	var roll = randf_range(0, 10 + agilInimigo)
+	if roll > 10:
+		return 0
+	return forca + (forca/2)
 
 func defesa():
 	overshield += vitalidade * 0.75

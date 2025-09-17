@@ -1,0 +1,186 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7n1qwy8pjx7h"]
+
+[ext_resource type="Script" path="res://menu/CharacterSelection.gd" id="1_charselect"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+bg_color = Color(0.2, 0.3, 0.4, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
+bg_color = Color(0.3, 0.4, 0.5, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[node name="CharacterSelection" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_charselect")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.2, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -250.0
+offset_right = 400.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "ESCOLHA SEU PERSONAGEM"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="CharacterContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="KnightPanel" type="Panel" parent="VBoxContainer/CharacterContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="KnightVBox" type="VBoxContainer" parent="VBoxContainer/CharacterContainer/KnightPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="KnightTitle" type="Label" parent="VBoxContainer/CharacterContainer/KnightPanel/KnightVBox"]
+layout_mode = 2
+text = "CAVALEIRO"
+horizontal_alignment = 1
+
+[node name="KnightStats" type="Label" parent="VBoxContainer/CharacterContainer/KnightPanel/KnightVBox"]
+layout_mode = 2
+text = "Vitalidade: 15
+Força: 10
+Agilidade: 6
+
+Tanque resistente com alta vitalidade"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KnightButton" type="Button" parent="VBoxContainer/CharacterContainer/KnightPanel/KnightVBox"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_2")
+text = "SELECIONAR"
+
+[node name="ArcherPanel" type="Panel" parent="VBoxContainer/CharacterContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="ArcherVBox" type="VBoxContainer" parent="VBoxContainer/CharacterContainer/ArcherPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ArcherTitle" type="Label" parent="VBoxContainer/CharacterContainer/ArcherPanel/ArcherVBox"]
+layout_mode = 2
+text = "ARQUEIRO"
+horizontal_alignment = 1
+
+[node name="ArcherStats" type="Label" parent="VBoxContainer/CharacterContainer/ArcherPanel/ArcherVBox"]
+layout_mode = 2
+text = "Vitalidade: 8
+Força: 12
+Agilidade: 15
+
+Balanceado com boa agilidade"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ArcherButton" type="Button" parent="VBoxContainer/CharacterContainer/ArcherPanel/ArcherVBox"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_2")
+text = "SELECIONAR"
+
+[node name="RoguePanel" type="Panel" parent="VBoxContainer/CharacterContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="RogueVBox" type="VBoxContainer" parent="VBoxContainer/CharacterContainer/RoguePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RogueTitle" type="Label" parent="VBoxContainer/CharacterContainer/RoguePanel/RogueVBox"]
+layout_mode = 2
+text = "BANDIDO"
+horizontal_alignment = 1
+
+[node name="RogueStats" type="Label" parent="VBoxContainer/CharacterContainer/RoguePanel/RogueVBox"]
+layout_mode = 2
+text = "Vitalidade: 6
+Força: 10
+Agilidade: 20
+
+Rápido com muitos ataques"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RogueButton" type="Button" parent="VBoxContainer/CharacterContainer/RoguePanel/RogueVBox"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_2")
+text = "SELECIONAR"
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_1")
+text = "VOLTAR"
+
+[connection signal="pressed" from="VBoxContainer/CharacterContainer/KnightPanel/KnightVBox/KnightButton" to="." method="_on_knight_selected"]
+[connection signal="pressed" from="VBoxContainer/CharacterContainer/ArcherPanel/ArcherVBox/ArcherButton" to="." method="_on_archer_selected"]
+[connection signal="pressed" from="VBoxContainer/CharacterContainer/RoguePanel/RogueVBox/RogueButton" to="." method="_on_rogue_selected"]
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_pressed"]

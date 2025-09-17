@@ -26,41 +26,22 @@ var defense_boost = 0
 
 func _ready():
 	print("Batalha iniciada!")
-	print("Verificando GameManager...")
 	
-	# Verificar se o GameManager existe
+	# Verificar se o GameManager e player existem
 	if not GameManager:
 		print("ERRO: GameManager não encontrado!")
 		return
-	
-	print("GameManager encontrado!")
-	
-	# Verificar se temos stats do player ou player válido
-	if GameManager.player:
-		print("Player encontrado no GameManager!")
-		battle_player = GameManager.player
-	elif GameManager.player_stats_backup.has("vitalidade"):
-		print("Usando stats backup do player!")
-		# Criar player temporário com stats backup
-		battle_player = Player.new()
-		battle_player.vitalidade = GameManager.player_stats_backup.vitalidade
-		battle_player.forca = GameManager.player_stats_backup.forca
-		battle_player.agilidade = GameManager.player_stats_backup.agilidade
-		battle_player.overshield = GameManager.player_stats_backup.overshield
-		battle_player.vida = GameManager.player_stats_backup.vida
-	else:
-		print("ERRO: Nenhum player ou stats encontrados!")
-		print("GameManager.player = ", GameManager.player)
-		print("GameManager.player_stats_backup = ", GameManager.player_stats_backup)
+	if not GameManager.player:
+		print("ERRO: GameManager.player não encontrado!")
 		return
 		
-	print("Player validado para batalha!")
-	print("Player stats na batalha: Vit %d, For %d, Agi %d" % [battle_player.vitalidade, battle_player.forca, battle_player.agilidade])
+	print("GameManager e player validados!")
 	
-	# Configurar enemy
+	# Configurar referências locais
+	battle_player = GameManager.player
 	act_enemy = GameManager.enemy
 	
-	print("Referências configuradas")
+	print("Referências locais configuradas")
 	
 	create_battle_player()
 	create_battle_enemy()
@@ -82,15 +63,7 @@ func create_battle_player():
 		battle_player.agilidade = 8
 		
 	player_max_hp = battle_player.vitalidade * 10
-	
-	# Usar vida atual se disponível E maior que 0, senão usar vida máxima
-	if GameManager.player_stats_backup.has("vida_atual") and GameManager.player_stats_backup.vida_atual > 0:
-		player_hp = GameManager.player_stats_backup.vida_atual
-		print("Usando vida atual persistente: %d/%d" % [player_hp, player_max_hp])
-	else:
-		player_hp = player_max_hp
-		print("Primeira batalha ou vida zerada, usando vida máxima: %d/%d" % [player_hp, player_max_hp])
-	
+	player_hp = player_max_hp
 	print("Player stats - Força: %d, Agilidade: %d, Vitalidade: %d" % [battle_player.forca, battle_player.agilidade, battle_player.vitalidade])
 	print("Player HP: %d/%d" % [player_hp, player_max_hp])
 	print("Ataque Ágil pode fazer até %d tentativas de acerto!" % battle_player.agilidade)
@@ -104,12 +77,15 @@ func create_battle_enemy():
 func multiple_agility_attacks():
 	# Simulate multiple attacks based on agility - each agility point = one attack attempt
 	var total_damage = 0
-	var hits = 1
+	var hits = 0
+	var max_attempts = battle_player.agilidade
 	
 	# Cada ponto de agilidade = uma tentativa de ataque
-
-	total_damage = battle_player.ataque_L(10) # Usando agilidade padrão do slime = 10
-
+	for i in range(max_attempts):
+		var damage = battle_player.ataque_L(10) # Usando agilidade padrão do slime = 10
+		if damage > 0:
+			total_damage += damage
+			hits += 1
 	
 	return {"damage": total_damage, "hits": hits}
 
@@ -266,14 +242,6 @@ func player_turn():
 	enable_buttons()
 
 func victory():
-	# Salvar vida atual do player
-	GameManager.update_player_vida(player_hp)
-	
-	# Marcar inimigo como derrotado
-	if GameManager.current_enemy_id != "":
-		GameManager.mark_enemy_defeated(GameManager.current_enemy_id)
-		print("Inimigo " + GameManager.current_enemy_id + " marcado como derrotado")
-	
 	message_label.text = "Vitória! Você derrotou o Slime!"
 	disable_buttons()
 	
@@ -285,16 +253,9 @@ func defeat():
 	disable_buttons()
 	
 	await get_tree().create_timer(2.0).timeout
-	# Ir para tela de game over em vez de voltar ao mapa
-	get_tree().change_scene_to_file("res://menu/GameOver.tscn")
+	return_to_map()
 
 func return_to_map():
-	# Salvar vida atual antes de voltar ao mapa
-	GameManager.update_player_vida(player_hp)
-	
-	# Sinalizar que precisa restaurar posição
-	GameManager.should_restore_position = true
-	
 	get_tree().change_scene_to_file("res://maps/Map1Test.tscn")
 
 func update_ui():
