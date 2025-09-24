@@ -1,6 +1,4 @@
 extends Node
-var player : Player
-var enemy : Enemy
 
 # Singleton para gerenciar dados do jogo
 var player_position = Vector2(150, 150)  # Posição padrão
