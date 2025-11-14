@@ -8,7 +8,7 @@ var player_max_hp : int
 var enemy_hp : int
 var enemy_max_hp : int 
 
-var enemy_attack = 15
+var enemy_attack = 6
 var is_defending = false
 var defense_boost = 0
 
@@ -25,22 +25,16 @@ var defense_boost = 0
 @onready var flee_button = $BattleUI/ActionPanel/ActionButtons/FleeButton
 
 func _ready():
-	print("Batalha iniciada!")
-	print("Verificando GameManager...")
-	
-	# Verificar se o GameManager existe
+	# Battle ready
 	if not GameManager:
 		print("ERRO: GameManager não encontrado!")
 		return
 	
-	print("GameManager encontrado!")
-	
 	# Verificar se temos stats do player ou player válido
 	if GameManager.player:
-		print("Player encontrado no GameManager!")
 		battle_player = GameManager.player
 	elif GameManager.player_stats_backup.has("vitalidade"):
-		print("Usando stats backup do player!")
+		# use backup stats
 		# Criar player temporário com stats backup
 		battle_player = Player.new()
 		battle_player.vitalidade = GameManager.player_stats_backup.vitalidade
@@ -48,19 +42,18 @@ func _ready():
 		battle_player.agilidade = GameManager.player_stats_backup.agilidade
 		battle_player.overshield = GameManager.player_stats_backup.overshield
 		battle_player.vida = GameManager.player_stats_backup.vida
+		
+		# restored level and xp from backup
 	else:
 		print("ERRO: Nenhum player ou stats encontrados!")
-		print("GameManager.player = ", GameManager.player)
-		print("GameManager.player_stats_backup = ", GameManager.player_stats_backup)
 		return
 		
-	print("Player validado para batalha!")
-	print("Player stats na batalha: Vit %d, For %d, Agi %d" % [battle_player.vitalidade, battle_player.forca, battle_player.agilidade])
+	# Player validated for battle
 	
 	# Configurar enemy
 	act_enemy = GameManager.enemy
 	
-	print("Referências configuradas")
+	# Enemy reference set
 	
 	create_battle_player()
 	create_battle_enemy()
@@ -72,13 +65,10 @@ func _ready():
 func create_battle_player():
 	# Verificar se o player tem stats válidos, senão usar valores padrão
 	if battle_player.vitalidade == 0 or battle_player.vitalidade == null:
-		print("AVISO: Vitalidade do player é 0 ou null, usando valor padrão")
 		battle_player.vitalidade = 10
 	if battle_player.forca == 0 or battle_player.forca == null:
-		print("AVISO: Força do player é 0 ou null, usando valor padrão")
 		battle_player.forca = 15
 	if battle_player.agilidade == 0 or battle_player.agilidade == null:
-		print("AVISO: Agilidade do player é 0 ou null, usando valor padrão")
 		battle_player.agilidade = 8
 		
 	player_max_hp = battle_player.vitalidade * 10
@@ -86,28 +76,22 @@ func create_battle_player():
 	# Usar vida atual se disponível E maior que 0, senão usar vida máxima
 	if GameManager.player_stats_backup.has("vida_atual") and GameManager.player_stats_backup.vida_atual > 0:
 		player_hp = GameManager.player_stats_backup.vida_atual
-		print("Usando vida atual persistente: %d/%d" % [player_hp, player_max_hp])
 	else:
 		player_hp = player_max_hp
-		print("Primeira batalha ou vida zerada, usando vida máxima: %d/%d" % [player_hp, player_max_hp])
 	
-	print("Player stats - Força: %d, Agilidade: %d, Vitalidade: %d" % [battle_player.forca, battle_player.agilidade, battle_player.vitalidade])
-	print("Player HP: %d/%d" % [player_hp, player_max_hp])
-	print("Ataque Ágil pode fazer até %d tentativas de acerto!" % battle_player.agilidade)
+	# Player stats and HP initialized for battle
 
 func create_battle_enemy():
 	# Inicializar stats do inimigo Slime
 	enemy_max_hp = 50
 	enemy_hp = enemy_max_hp
-	print("Enemy Slime stats - HP: %d/%d, Attack: %d" % [enemy_hp, enemy_max_hp, enemy_attack])
+	# Enemy stats initialized
 
 func multiple_agility_attacks():
 	# Simulate multiple attacks based on agility - each agility point = one attack attempt
 	var total_damage = 0
 	var hits = 1
-	
 	# Cada ponto de agilidade = uma tentativa de ataque
-
 	total_damage = battle_player.ataque_L(10) # Usando agilidade padrão do slime = 10
 
 	
@@ -128,7 +112,7 @@ func setup_ui():
 		print("ERRO: enemy_hp_label não encontrado!")
 		return
 	
-	print("UI Referencias validadas com sucesso!")
+	# UI references validated
 	
 	# Set initial HP values for enemy
 	enemy_hp_bar.max_value = enemy_max_hp
@@ -152,7 +136,7 @@ func connect_buttons():
 		print("ERRO: flee_button não encontrado!")
 		return
 		
-	print("Botões validados com sucesso!")
+	# Buttons connected
 	
 	attack_button.pressed.connect(_on_attack_pressed)
 	quick_attack_button.pressed.connect(_on_quick_attack_pressed)
@@ -162,7 +146,7 @@ func connect_buttons():
 func _on_attack_pressed():
 	disable_buttons()
 	# Use the player's ataque_P() function for heavy attack
-	var damage = int(battle_player.ataque_P(10))
+	var damage = int(battle_player.ataque_P(10)) #variavel que vai eh a agilidade do inimigo -> chance de esquiva
 	enemy_hp -= damage
 	enemy_hp = max(0, enemy_hp)
 	
@@ -187,12 +171,7 @@ func _on_quick_attack_pressed():
 	if hits > 0:
 		enemy_hp -= total_damage
 		enemy_hp = max(0, enemy_hp)
-		if hits == 1:
-			message_label.text = "Ataque Ágil! 1/%d acerto causou %d de dano!" % [max_possible, total_damage]
-		elif hits == max_possible:
-			message_label.text = "Ataque Ágil! COMBO PERFEITO! %d/%d acertos = %d dano!" % [hits, max_possible, total_damage]
-		else:
-			message_label.text = "Ataque Ágil! %d/%d acertos em combo = %d dano total!" % [hits, max_possible, total_damage]
+		message_label.text = "Ataque Ágil! acerto causou %d de dano!" % [total_damage]
 	else:
 		message_label.text = "Ataque Ágil falhou! 0/%d acertos conectados!" % max_possible
 	
@@ -268,16 +247,33 @@ func player_turn():
 func victory():
 	# Salvar vida atual do player
 	GameManager.update_player_vida(player_hp)
-	
+	# Victory handling
+
 	# Marcar inimigo como derrotado
 	if GameManager.current_enemy_id != "":
 		GameManager.mark_enemy_defeated(GameManager.current_enemy_id)
-		print("Inimigo " + GameManager.current_enemy_id + " marcado como derrotado")
 	
 	message_label.text = "Vitória! Você derrotou o Slime!"
 	disable_buttons()
 	
+	# Check if still in tree before awaiting
+	if not is_inside_tree():
+		return
+	
 	await get_tree().create_timer(2.0).timeout
+	
+	# Incrementar XP após o timer para evitar mudança de cena prematura
+	if GameManager.current_enemy_id != "":
+		GameManager.incrXp(50)
+		# Se mudou de cena para level up, não continua
+		if not is_inside_tree():
+			return
+	
+	# Verificar se todos os inimigos foram derrotados
+	if GameManager.total_enemies > 0 and len(GameManager.defeated_enemies) >= GameManager.total_enemies:
+		get_tree().change_scene_to_file("res://menu/Victory.tscn")
+		return
+	
 	return_to_map()
 
 func defeat():
@@ -298,8 +294,6 @@ func return_to_map():
 	get_tree().change_scene_to_file("res://maps/Map1Test.tscn")
 
 func update_ui():
-	print("Atualizando UI - Player HP: %d/%d, Enemy HP: %d/%d" % [player_hp, player_max_hp, enemy_hp, enemy_max_hp])
-	
 	player_hp_bar.value = player_hp
 	if battle_player.overshield > 0:
 		player_hp_label.text = "HP: %d/%d (+%d escudo)" % [player_hp, player_max_hp, battle_player.overshield]
@@ -308,8 +302,7 @@ func update_ui():
 	
 	enemy_hp_bar.value = enemy_hp
 	enemy_hp_label.text = "HP: %d/%d" % [enemy_hp, enemy_max_hp]
-	
-	print("UI atualizada com sucesso!")
+
 
 func disable_buttons():
 	attack_button.disabled = true

@@ -5,21 +5,22 @@ extends Node2D
 @onready var walls = $Walls
 
 func _ready():
-	print("Map1Test: Game iniciado!")
-	print("Player e Enemy estão configurados com animações e movimentação!")
-	print("Sistema de colisões ativo: Player e Enemy colidem com as paredes!")
-	print("Sistema de batalha: Encoste no enemy para iniciar batalha!")
-	print("Use WASD ou setas para mover o player")
-	print("Use ESC para voltar ao menu principal")
-	print("Use H para ver status do player")
-	print("O enemy se move automaticamente e rebate nas paredes")
+	# Map ready
 	
+	# Contar o total de inimigos no mapa (apenas na primeira vez)
+	if GameManager.total_enemies == 0:
+		var enemy_count = 0
+		for child in get_children():
+			if child is Enemy:
+				enemy_count += 1
+		GameManager.total_enemies = enemy_count
+		# Log total enemies once for debugging
+		print("Total de inimigos no mapa: %d" % GameManager.total_enemies)
 	# Verificar se inimigos foram derrotados e escondê-los
 	check_defeated_enemies()
 	
 	# Configurar GameManager com referências do player e enemy
 	GameManager.enemy = enemy
-	print("GameManager configurado com enemy!")
 	
 	# Aplicar stats do personagem selecionado ou usar valores padrão
 	if GameManager.selected_character.has("vitalidade"):
@@ -29,33 +30,31 @@ func _ready():
 		player.agilidade = GameManager.selected_character.agilidade
 		player.overshield = 0
 		
-		# Usar vida atual se disponível, senão usar vida máxima (primeira vez)
-		if GameManager.player_stats_backup.has("vida_atual") and GameManager.player_stats_backup.vida_atual > 0:
-			player.vida = GameManager.player_stats_backup.vida_atual
-			print("Usando vida atual persistente: %d" % player.vida)
-		else:
-			player.vida = player.vitalidade * 10  # Vida máxima na primeira vez
-			print("Primeira vez no mapa, usando vida máxima: %d" % player.vida)
+		# Restaurar dados do backup se existirem (eles incluem melhorias de level up)
+		if GameManager.player_stats_backup.has("vitalidade"):
+			player.vitalidade = GameManager.player_stats_backup.vitalidade
+			player.forca = GameManager.player_stats_backup.forca
+			player.agilidade = GameManager.player_stats_backup.agilidade
 			
-		var type_names = ["Cavaleiro", "Arqueiro", "Bandido"]
-		print("Stats do personagem %s aplicados!" % type_names[GameManager.selected_character.type])
-		print("Vitalidade: %d, Força: %d, Agilidade: %d, Vida: %d" % [player.vitalidade, player.forca, player.agilidade, player.vida])
+			# Usar vida atual se disponível, senão usar vida máxima (primeira vez)
+			if GameManager.player_stats_backup.has("vida_atual") and GameManager.player_stats_backup.vida_atual > 0:
+				player.vida = GameManager.player_stats_backup.vida_atual
+			else:
+				player.vida = player.vitalidade * 10  # Vida máxima na primeira vez
+			
+		# Player stats applied
 	else:
 		# Valores padrão se nenhum personagem foi selecionado
 		player.setTtipo(0)  # Usar cavaleiro como padrão
-		print("Nenhum personagem selecionado, usando Cavaleiro padrão")
+		# No selected character: using default
 	
 	# Restaurar posição do player se voltando de batalha
 	if GameManager.should_restore_position and GameManager.battle_position != Vector2.ZERO:
 		player.global_position = GameManager.battle_position
 		GameManager.should_restore_position = false
-		print("Posição do player restaurada para: ", GameManager.battle_position)
 	
 	# Atualizar referência do GameManager para o player da cena
 	GameManager.save_player_for_battle(player)
-	print("GameManager.player configurado com stats:")
-	print("Player HP calculado: %d (Vit %d x 10)" % [player.vitalidade * 10, player.vitalidade])
-	print("GameManager.player reference: ", GameManager.player)
 	
 	# Reset battle trigger when returning from battle
 	if player.has_method("reset_battle_trigger"):

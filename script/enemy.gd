@@ -3,7 +3,7 @@ class_name Enemy
 
 @onready var sprite = $AnimatedSprite2D
 
-var speed = 50
+@export var speed = 50
 var direction = Vector2.RIGHT
 var change_timer = 0.0
 var change_interval = 2.0

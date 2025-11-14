@@ -34,13 +34,13 @@ func setTtipo(tip: int):
 			agilidade = 20
 			overshield = 8
 			vida = vitalidade * 10  # Vida real baseada na vitalidade
+	
 	return 0
 
 func _ready():
-	print("Player _ready() chamado!")
+	# Ready: initialize player visuals and speed
 	if speed == 0 or speed == null:
 		speed = 200  # Garantir um valor válido
-	print("Speed configurado: ", speed)
 	sprite.play("idle")
 
 func _physics_process(_delta):
@@ -75,16 +75,12 @@ func handle_movement():
 		if collider is Enemy and can_battle:
 			# Verificar se o inimigo está visível e ativo
 			if not collider.visible or not collider.process_mode == Node.PROCESS_MODE_INHERIT:
-				print("Inimigo invisível ou inativo, ignorando colisão")
+				# enemy invisible or inactive; ignore collision
 				continue
-			
-			print("Player colidiu com o enemy! Iniciando batalha...")
-			print("Player stats antes da batalha: Vit %d, For %d, Agi %d" % [vitalidade, forca, agilidade])
-			
 			# Verificar se este inimigo já foi derrotado
 			var enemy_id = collider.enemy_id
 			if GameManager.is_enemy_defeated(enemy_id):
-				print("Inimigo já foi derrotado, ignorando colisão")
+				# already defeated
 				continue
 			
 			can_battle = false
@@ -116,9 +112,6 @@ func handle_animation():
 
 func reset_battle_trigger():
 	can_battle = true
-
-
-
 
 func trocar_arma(nova_arma: equipamento):
 	if equip.arma != null:
@@ -155,4 +148,3 @@ func ataque_P(agilInimigo : int):
 
 func defesa():
 	overshield += vitalidade * 0.75
-	

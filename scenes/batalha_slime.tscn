@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://fep85xh1qvc3"]
 
-[ext_resource type="Script" path="res://scenes/batalha_slime.gd" id="1_0cnhg"]
+[ext_resource type="Script" uid="uid://bdwewcrpeylfq" path="res://scenes/batalha_slime.gd" id="1_0cnhg"]
 [ext_resource type="Texture2D" uid="uid://csfaq7dn1a7to" path="res://3booodpro's First Asset/Daco_289855.png" id="1_fu0ps"]
 [ext_resource type="Texture2D" uid="uid://cypc8w4kdp22g" path="res://3booodpro's First Asset/—Pngtree—blue slime in pixel art_15588348.png" id="3_a420b"]
 
@@ -142,7 +142,10 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -200.0
+offset_left = 2.0
+offset_top = -199.0
+offset_right = 2.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -194,7 +197,7 @@ anchor_bottom = 1.0
 offset_left = -303.0
 offset_top = -48.0
 offset_right = 297.0
-offset_bottom = 52.0
+offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -203,10 +206,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -3.0
-offset_top = -2.0
-offset_right = -3.0
-offset_bottom = -2.0
+offset_left = 11.0
+offset_top = 6.0
+offset_right = -9.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Selecione sua ação!"

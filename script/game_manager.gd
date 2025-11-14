@@ -1,6 +1,7 @@
 extends Node
 var player : Player
 var enemy : Enemy
+var xp = 0
 
 # Character selection data
 var selected_character = {}
@@ -14,6 +15,7 @@ var defeated_enemies = []  # Lista de IDs de inimigos derrotados
 var current_enemy_id = ""  # ID do inimigo atual em batalha
 var battle_position = Vector2.ZERO  # Posição do player antes da batalha
 var should_restore_position = false  # Flag para restaurar posição
+var total_enemies = 0 # Total de inimigos no mapa
 
 # Singleton para gerenciar dados do jogo
 var player_position = Vector2(150, 150)  # Posição padrão
@@ -24,6 +26,16 @@ var player_stats = {
 	"defense": 5,
 	"agility": 10
 }
+
+func incrXp(val: int):
+	xp = xp + val
+	if xp >= 100:
+		xp -= 100
+		# Save current position before level up
+		should_restore_position = true
+		# Trigger level up screen
+		get_tree().change_scene_to_file("res://menu/LevelUp.tscn")
+		
 
 func save_player_for_battle(player_instance: Player):
 	# Backup player stats for battle
@@ -36,19 +48,16 @@ func save_player_for_battle(player_instance: Player):
 		"vida_atual": player_instance.vida  # HP atual para persistência
 	}
 	player = player_instance
-	print("Player stats salvos para batalha: ", player_stats_backup)
-
 func update_player_vida(nova_vida: int):
 	# Atualiza a vida atual do player
 	if player_stats_backup.has("vida_atual"):
 		player_stats_backup.vida_atual = nova_vida
 	if player:
 		player.vida = nova_vida
-	print("Vida do player atualizada para: %d" % nova_vida)
 
 func save_player_position(pos: Vector2):
 	player_position = pos
-	print("Posição do player salva: ", pos)
+	# position saved
 
 func get_player_position() -> Vector2:
 	return player_position
@@ -63,14 +72,14 @@ func apply_character_stats_to_player():
 		player.forca = selected_character.forca
 		player.agilidade = selected_character.agilidade
 		player.overshield = 0
-		print("Stats aplicados ao player: Vit %d, For %d, Agi %d" % [player.vitalidade, player.forca, player.agilidade])
+		# applied stats to player
 
 func reset_character_selection():
 	selected_character = {}
 	player_stats_backup = {}
 	player = null
 	reset_defeated_enemies()  # Resetar inimigos quando novo personagem é selecionado
-	print("Seleção de personagem, vida e inimigos derrotados resetados - nova vida será vida máxima")
+	# selection reset
 
 func reset_vida_to_max():
 	# Resetar vida para máxima baseada na vitalidade atual
@@ -80,12 +89,12 @@ func reset_vida_to_max():
 			player_stats_backup.vida_atual = vida_maxima
 		if player:
 			player.vida = vida_maxima
-		print("Vida resetada para máxima: %d HP" % vida_maxima)
+		# vida resetada
 
 func save_battle_position(pos: Vector2):
 	# Salvar posição onde a batalha começou
 	battle_position = pos
-	print("Posição de batalha salva: ", pos)
+	# battle position saved
 
 func get_battle_position() -> Vector2:
 	return battle_position
@@ -94,7 +103,7 @@ func mark_enemy_defeated(enemy_id: String):
 	# Marcar inimigo como derrotado
 	if not defeated_enemies.has(enemy_id):
 		defeated_enemies.append(enemy_id)
-		print("Inimigo %s derrotado e removido permanentemente" % enemy_id)
+		# enemy marked defeated: %s
 
 func defeat_enemy(enemy_id: String):
 	# Marcar inimigo como derrotado (função alternativa)
@@ -106,4 +115,4 @@ func is_enemy_defeated(enemy_id: String) -> bool:
 func reset_defeated_enemies():
 	# Resetar inimigos derrotados (usado quando novo personagem é selecionado)
 	defeated_enemies.clear()
-	print("Lista de inimigos derrotados resetada")
+	# defeated list reset
