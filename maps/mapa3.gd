@@ -5,8 +5,7 @@ extends Node2D
 @onready var walls = $Walls
 
 func _ready():
-
-	GameManager.layer = 1
+	# Map ready
 	
 	# Contar o total de inimigos no mapa (apenas na primeira vez)
 	if GameManager.total_enemies == 0:
@@ -16,7 +15,7 @@ func _ready():
 				enemy_count += 1
 		GameManager.total_enemies = enemy_count
 		# Log total enemies once for debugging
-		print("Total de inimigos no mapa: %d" % GameManager.total_enemies)
+		print("Total de inimigos no mapa3: %d" % GameManager.total_enemies)
 	# Verificar se inimigos foram derrotados e escondê-los
 	check_defeated_enemies()
 	
@@ -118,6 +117,7 @@ func _process(delta):
 	check_map_completion()
 
 func check_map_completion():
+	# Contar quantos inimigos ainda estão vivos
 	var defeated_count = 0
 	
 	for child in get_children():
@@ -125,17 +125,14 @@ func check_map_completion():
 			if GameManager.is_enemy_defeated(child.enemy_id):
 				defeated_count += 1
 	
-	# Se todos os inimigos foram derrotados, teleportar para o próximo mapa
+	# Se todos os inimigos foram derrotados, mostrar tela de vitória
 	if GameManager.total_enemies > 0 and defeated_count >= GameManager.total_enemies:
-		print("Todos os inimigos derrotados! Teleportando para mapa2...")
+		print("Todos os inimigos derrotados! Você completou todos os andares!")
 		# Salvar posição do player antes de trocar de cena
 		if player:
 			GameManager.save_battle_position(player.global_position)
 			GameManager.should_restore_position = true
-		# Resetar contador de inimigos para o próximo mapa
+		# Resetar contador de inimigos
 		GameManager.total_enemies = 0
-		# Trocar para o mapa 2
-		GameManager.layer = 2
-		GameManager.player_stats = GameManager.player_stats_backup
-		
-		get_tree().change_scene_to_file("res://maps/mapa2.tscn")
+		# Ir para tela de vitória
+		get_tree().change_scene_to_file("res://menu/Victory.tscn")

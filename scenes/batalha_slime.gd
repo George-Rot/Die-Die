@@ -75,6 +75,7 @@ func create_battle_player():
 	if battle_player.agilidade == 0 or battle_player.agilidade == null:
 		battle_player.agilidade = 8
 		
+	print(GameManager.player_stats)
 	# Ensure loadout is initialized for battle player
 	if battle_player.equip == null:
 		var default_weapon = equipamento.new(0, 0, 0)

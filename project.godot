@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.5", "Forward Plus")
 [autoload]
 
 GameManager="*res://script/game_manager.gd"
+BatalhaSlime="*res://scenes/batalha_slime.gd"
 
 [input]
 

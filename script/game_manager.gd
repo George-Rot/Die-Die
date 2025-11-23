@@ -1,10 +1,12 @@
 extends Node
 var player : Player
 var enemy : Enemy
+var xp = 0
+
 var equip : equipamento
 var armour : armadura
 
-var xp = 0
+var layer = 1
 
 # Character selection data
 var selected_character = {}
@@ -30,6 +32,9 @@ var player_stats = {
 	"agility": 10
 }
 
+func _ready() -> void:
+	print("gamemanager inicializado")
+
 func incrXp(val: int):
 	xp = xp + val
 	if xp >= 100:
@@ -41,6 +46,7 @@ func incrXp(val: int):
 		
 
 func save_player_for_battle(player_instance: Player):
+	print("update nas funcoes save battle")
 	# Backup player stats for battle
 	player_stats_backup = {
 		"vitalidade": player_instance.vitalidade,
@@ -52,6 +58,7 @@ func save_player_for_battle(player_instance: Player):
 	}
 	player = player_instance
 func update_player_vida(nova_vida: int):
+	print("alguem chamou vida")
 	# Atualiza a vida atual do player
 	if player_stats_backup.has("vida_atual"):
 		player_stats_backup.vida_atual = nova_vida
@@ -70,6 +77,7 @@ func reset_player_stats():
 
 func apply_character_stats_to_player():
 	# Apply selected character stats to the player instance
+	print("algo reiniciou o char")
 	if selected_character.has("vitalidade") and player:
 		player.vitalidade = selected_character.vitalidade
 		player.forca = selected_character.forca
@@ -78,9 +86,6 @@ func apply_character_stats_to_player():
 		# applied stats to player
 
 func reset_character_selection():
-	selected_character = {}
-	player_stats_backup = {}
-	player = null
 	reset_defeated_enemies()  # Resetar inimigos quando novo personagem é selecionado
 	# selection reset
 
@@ -119,3 +124,18 @@ func reset_defeated_enemies():
 	# Resetar inimigos derrotados (usado quando novo personagem é selecionado)
 	defeated_enemies.clear()
 	# defeated list reset
+
+func get_enemy_stat_multiplier() -> float:
+	# Retorna o multiplicador de stats dos inimigos baseado no andar
+	# Andar 1: 1x (normal)
+	# Andar 2: 2x (dobrado)
+	# Andar 3: 5x (quintuplicado)
+	match layer:
+		1:
+			return 1.0
+		2:
+			return 2.0
+		3:
+			return 5.0
+		_:
+			return 1.0

@@ -5,13 +5,6 @@ extends Node2D
 @onready var walls = $Walls
 
 func _ready():
-	print("Map1Test: Game iniciado!")
-	print("Player e Enemy estão configurados com animações e movimentação!")
-	print("Sistema de colisões ativo: Player e Enemy colidem com as paredes!")
-	print("Sistema de batalha: Encoste no enemy para iniciar batalha!")
-	print("Use WASD ou setas para mover o player")
-	print("Use ESC para voltar ao menu principal")
-	print("O enemy se move automaticamente e rebate nas paredes")
 	
 	# Configurar GameManager com referências do player e enemy
 	GameManager.enemy = enemy
@@ -35,11 +28,6 @@ func _ready():
 	
 	# Atualizar referência do GameManager para o player da cena
 	GameManager.player = player
-		print("Nenhum personagem selecionado, usando stats padrão")
-	
-	# Reset battle trigger when returning from battle
-	if player.has_method("reset_battle_trigger"):
-		player.call("reset_battle_trigger")
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):  # ESC key

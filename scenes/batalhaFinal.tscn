@@ -1,0 +1,218 @@
+[gd_scene load_steps=7 format=3 uid="uid://dcpm5pm7q2k6r"]
+
+[ext_resource type="Script" uid="uid://bdwewcrpeylfq" path="res://scenes/batalha_slime.gd" id="1_fgnu0"]
+[ext_resource type="Texture2D" uid="uid://csfaq7dn1a7to" path="res://3booodpro's First Asset/Daco_289855.png" id="2_revhc"]
+[ext_resource type="Texture2D" uid="uid://cypc8w4kdp22g" path="res://3booodpro's First Asset/—Pngtree—blue slime in pixel art_15588348.png" id="3_krn1b"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_player"]
+bg_color = Color(0.2, 0.8, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_enemy"]
+bg_color = Color(0.8, 0.2, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(0.2, 0.3, 0.4, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.5, 0.6, 1)
+
+[node name="BatalhaSlime" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fgnu0")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BattleUI" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopPanel" type="Panel" parent="BattleUI"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 150.0
+grow_horizontal = 2
+
+[node name="PlayerStats" type="VBoxContainer" parent="BattleUI/TopPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 50.0
+offset_top = -40.0
+offset_right = 300.0
+offset_bottom = 40.0
+grow_vertical = 2
+
+[node name="PlayerLabel" type="Label" parent="BattleUI/TopPanel/PlayerStats"]
+layout_mode = 2
+text = "PLAYER"
+horizontal_alignment = 1
+
+[node name="PlayerHPBar" type="ProgressBar" parent="BattleUI/TopPanel/PlayerStats"]
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp_player")
+value = 100.0
+show_percentage = false
+
+[node name="PlayerHPLabel" type="Label" parent="BattleUI/TopPanel/PlayerStats"]
+layout_mode = 2
+text = "HP: 100/100"
+horizontal_alignment = 1
+
+[node name="EnemyStats" type="VBoxContainer" parent="BattleUI/TopPanel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -40.0
+offset_right = -50.0
+offset_bottom = 40.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="EnemyLabel" type="Label" parent="BattleUI/TopPanel/EnemyStats"]
+layout_mode = 2
+text = "SLIME"
+horizontal_alignment = 1
+
+[node name="EnemyHPBar" type="ProgressBar" parent="BattleUI/TopPanel/EnemyStats"]
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp_enemy")
+max_value = 50.0
+value = 50.0
+show_percentage = false
+
+[node name="EnemyHPLabel" type="Label" parent="BattleUI/TopPanel/EnemyStats"]
+layout_mode = 2
+text = "HP: 50/50"
+horizontal_alignment = 1
+
+[node name="BattleArea" type="Control" parent="BattleUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 150.0
+offset_bottom = -200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayerSprite" type="Sprite2D" parent="BattleUI/BattleArea"]
+position = Vector2(375, 141)
+scale = Vector2(0.259599, 0.182542)
+texture = ExtResource("2_revhc")
+
+[node name="EnemySprite" type="Sprite2D" parent="BattleUI/BattleArea"]
+position = Vector2(832, 159)
+scale = Vector2(0.0725098, 0.0430908)
+texture = ExtResource("3_krn1b")
+
+[node name="ActionPanel" type="Panel" parent="BattleUI"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -199.0
+offset_right = 2.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ActionButtons" type="HBoxContainer" parent="BattleUI/ActionPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -50.0
+offset_right = 300.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AttackButton" type="Button" parent="BattleUI/ActionPanel/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+text = "ATAQUE PODEROSO"
+
+[node name="QuickAttackButton" type="Button" parent="BattleUI/ActionPanel/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+text = "ATAQUE ÁGIL"
+
+[node name="DefendButton" type="Button" parent="BattleUI/ActionPanel/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+text = "DEFENDER"
+
+[node name="FleeButton" type="Button" parent="BattleUI/ActionPanel/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+text = "FUGIR"
+
+[node name="MessagePanel" type="Panel" parent="BattleUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -303.0
+offset_top = -48.0
+offset_right = 297.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MessageLabel" type="Label" parent="BattleUI/MessagePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 6.0
+offset_right = -9.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Selecione sua ação!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2

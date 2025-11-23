@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c8y2q4x501j3k"]
 
-[ext_resource type="Script" path="res://menu/ItemDrop.gd" id="1_k2l3m"]
+[ext_resource type="Script" uid="uid://cesw5s2vct5l5" path="res://menu/ItemDrop.gd" id="1_k2l3m"]
 
 [node name="ItemDrop" type="Control"]
 layout_mode = 3

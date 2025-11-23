@@ -5,9 +5,16 @@ extends Node2D
 @onready var walls = $Walls
 
 func _ready():
-
-	GameManager.layer = 1
-	
+	# Map ready
+	print("nova agilidade")
+	print(player.agilidade)
+	print("novo id")
+	print(GameManager.player)
+	print("novo player stats")
+	print(GameManager.player_stats)
+	print("novo backups")
+	print(GameManager.player_stats_backup)
+	player = GameManager.player
 	# Contar o total de inimigos no mapa (apenas na primeira vez)
 	if GameManager.total_enemies == 0:
 		var enemy_count = 0
@@ -16,7 +23,7 @@ func _ready():
 				enemy_count += 1
 		GameManager.total_enemies = enemy_count
 		# Log total enemies once for debugging
-		print("Total de inimigos no mapa: %d" % GameManager.total_enemies)
+		print("Total de inimigos no mapa2: %d" % GameManager.total_enemies)
 	# Verificar se inimigos foram derrotados e escondê-los
 	check_defeated_enemies()
 	
@@ -24,39 +31,15 @@ func _ready():
 	GameManager.enemy = enemy
 	
 	# Aplicar stats do personagem selecionado ou usar valores padrão
-	if GameManager.selected_character.has("vitalidade"):
-		# Copiar stats do player selecionado para o player da cena
-		player.vitalidade = GameManager.selected_character.vitalidade
-		player.forca = GameManager.selected_character.forca
-		player.agilidade = GameManager.selected_character.agilidade
-		player.overshield = 0
-		
-		# Restaurar dados do backup se existirem (eles incluem melhorias de level up)
-		if GameManager.player_stats_backup.has("vitalidade"):
-			player.vitalidade = GameManager.player_stats_backup.vitalidade
-			player.forca = GameManager.player_stats_backup.forca
-			player.agilidade = GameManager.player_stats_backup.agilidade
-			
-			# Usar vida atual se disponível, senão usar vida máxima (primeira vez)
-			if GameManager.player_stats_backup.has("vida_atual") and GameManager.player_stats_backup.vida_atual > 0:
-				player.vida = GameManager.player_stats_backup.vida_atual
-			else:
-				player.vida = player.vitalidade * 10  # Vida máxima na primeira vez
-			
-		# Player stats applied
-	else:
-		# Valores padrão se nenhum personagem foi selecionado
-		player.setTtipo(0)  # Usar cavaleiro como padrão
-		# No selected character: using default
-	
-	# Restaurar posição do player se voltando de batalha
-	if GameManager.should_restore_position and GameManager.battle_position != Vector2.ZERO:
-		player.global_position = GameManager.battle_position
-		GameManager.should_restore_position = false
-	
+	# Restaurar dados do backup se existirem (eles incluem melhorias de level up)
+	player.vitalidade = GameManager.player_stats_backup.vitalidade
+	player.forca = GameManager.player_stats_backup.forca
+	player.agilidade = GameManager.player_stats_backup.agilidade
+	player.vida = GameManager.player_stats_backup.vida_atual
+
 	# Atualizar referência do GameManager para o player da cena
 	GameManager.save_player_for_battle(player)
-	
+	print(player.agilidade)
 	# Reset battle trigger when returning from battle
 	if player.has_method("reset_battle_trigger"):
 		player.call("reset_battle_trigger")
@@ -118,6 +101,7 @@ func _process(delta):
 	check_map_completion()
 
 func check_map_completion():
+	# Contar quantos inimigos ainda estão vivos
 	var defeated_count = 0
 	
 	for child in get_children():
@@ -127,15 +111,13 @@ func check_map_completion():
 	
 	# Se todos os inimigos foram derrotados, teleportar para o próximo mapa
 	if GameManager.total_enemies > 0 and defeated_count >= GameManager.total_enemies:
-		print("Todos os inimigos derrotados! Teleportando para mapa2...")
+		print("Todos os inimigos derrotados! Teleportando para mapa3...")
 		# Salvar posição do player antes de trocar de cena
 		if player:
 			GameManager.save_battle_position(player.global_position)
 			GameManager.should_restore_position = true
 		# Resetar contador de inimigos para o próximo mapa
 		GameManager.total_enemies = 0
-		# Trocar para o mapa 2
-		GameManager.layer = 2
-		GameManager.player_stats = GameManager.player_stats_backup
-		
-		get_tree().change_scene_to_file("res://maps/mapa2.tscn")
+		# Trocar para o mapa 3
+		GameManager.layer = 3
+		get_tree().change_scene_to_file("res://maps/mapa3.tscn")
