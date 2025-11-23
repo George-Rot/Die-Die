@@ -1,6 +1,9 @@
 extends Node
 var player : Player
 var enemy : Enemy
+var equip : equipamento
+var armour : armadura
+
 var xp = 0
 
 # Character selection data

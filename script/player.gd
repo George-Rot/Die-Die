@@ -42,6 +42,12 @@ func _ready():
 	if speed == 0 or speed == null:
 		speed = 200  # Garantir um valor válido
 	sprite.play("idle")
+	
+	# Initialize loadout if null
+	if equip == null:
+		var default_weapon = equipamento.new(0, 0, 0)
+		var default_armor = armadura.new(0, 0, 0)
+		equip = loadout.new(default_weapon, default_armor)
 
 func _physics_process(_delta):
 	handle_movement()
@@ -114,22 +120,24 @@ func reset_battle_trigger():
 	can_battle = true
 
 func trocar_arma(nova_arma: equipamento):
-	if equip.arma != null:
-		forca -= equip.arma.forca
-		agilidade -= equip.arma.agilidade
+	if GameManager.equip != null:
+		forca -= GameManager.equip.forca
+		agilidade -= GameManager.equip.agilidade
+	
 	equip.arma = nova_arma
 	forca += nova_arma.forca
 	agilidade += nova_arma.agilidade
 
 func trocar_armadura(nova_armadura: armadura):
-	if equip.armour != null:
-		vitalidade -= equip.armour.vitalidade
-		overshield -= equip.armour.overshield
+	if GameManager.armour != null:
+		vitalidade -= GameManager.armour.vitalidade
+		agilidade -= GameManager.armour.agilidade
+	
 	equip.armour = nova_armadura
 	vitalidade += nova_armadura.vitalidade
-	overshield += nova_armadura.overshield
+	agilidade += nova_armadura.agilidade
 
-func ataque_L(agilInimigo: int):
+func ataque_L():
 	var chance = (agilidade * agilidade/2 - agilidade)
 	var roll = randf_range(0, chance)
 	if roll >= 20:

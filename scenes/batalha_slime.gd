@@ -8,6 +8,10 @@ var player_max_hp : int
 var enemy_hp : int
 var enemy_max_hp : int 
 
+# Removed unused variables that were shadowing class names
+# var equipamento : equipamento
+# var newEquip : equipamento
+
 var enemy_attack = 6
 var is_defending = false
 var defense_boost = 0
@@ -71,6 +75,12 @@ func create_battle_player():
 	if battle_player.agilidade == 0 or battle_player.agilidade == null:
 		battle_player.agilidade = 8
 		
+	# Ensure loadout is initialized for battle player
+	if battle_player.equip == null:
+		var default_weapon = equipamento.new(0, 0, 0)
+		var default_armor = armadura.new(0, 0, 0)
+		battle_player.equip = loadout.new(default_weapon, default_armor)
+		
 	player_max_hp = battle_player.vitalidade * 10
 	
 	# Usar vida atual se disponível E maior que 0, senão usar vida máxima
@@ -92,7 +102,7 @@ func multiple_agility_attacks():
 	var total_damage = 0
 	var hits = 1
 	# Cada ponto de agilidade = uma tentativa de ataque
-	total_damage = battle_player.ataque_L(10) # Usando agilidade padrão do slime = 10
+	total_damage = battle_player.ataque_L() # Usando agilidade padrão do slime = 10
 
 	
 	return {"damage": total_damage, "hits": hits}
@@ -247,13 +257,97 @@ func player_turn():
 func victory():
 	# Salvar vida atual do player
 	GameManager.update_player_vida(player_hp)
+	
+	# Chance de dropar um item (60% de chance)
+	var drop_roll = randi_range(0, 99)
+	if drop_roll > 1:
+		var is_weapon = randi() % 2 == 0
+		var rarity_roll = randi_range(0, 99)
+		
+		var min_stat = 0
+		var max_stat = 0
+		var rarity_val = 0
+		
+		# 5% Legendary, 10% Epic, 20% Rare, 25% Uncommon, 40% Common (Normalized to 100)
+		if rarity_roll < 5: # 5%
+			min_stat = 15
+			max_stat = 25
+			rarity_val = 4 # Legendary
+		elif rarity_roll < 15: # 10% (5+10)
+			min_stat = 15
+			max_stat = 20
+			rarity_val = 3 # Epic
+		elif rarity_roll < 35: # 20% (15+20)
+			min_stat = 10
+			max_stat = 20
+			rarity_val = 2 # Rare
+		elif rarity_roll < 60: # 25% (35+25)
+			min_stat = 5
+			max_stat = 15
+			rarity_val = 1 # Uncommon
+		else: # 40% (Remaining)
+			min_stat = 5
+			max_stat = 10
+			rarity_val = 0 # Common
+			
+		# Instantiate ItemDrop screen
+		var item_drop_scene = load("res://menu/ItemDrop.tscn").instantiate()
+		add_child(item_drop_scene)
+		
+		if is_weapon:
+			var dmg = randi_range(min_stat, max_stat)
+			var agi = randi_range(min_stat, max_stat)
+			var new_weapon = equipamento.new(dmg, agi, rarity_val)
+			
+			# Setup UI
+			var act = GameManager.equip
+			item_drop_scene.setup(act, new_weapon, "weapon")
+			
+			# Wait for user choice
+			var equipped = await item_drop_scene.finished
+			
+			if equipped:
+				battle_player.trocar_arma(new_weapon)
+				GameManager.equip = new_weapon
+				message_label.text = "Vitória! Nova arma equipada!"
+			else:
+				message_label.text = "Vitória! Item descartado."
+				
+		else:
+			var vit = randi_range(min_stat, max_stat)
+			var agi = randi_range(min_stat, max_stat) / 3
+			var new_armor = armadura.new(vit, agi, rarity_val)
+			
+			# Setup UI
+			item_drop_scene.setup(GameManager.armour, new_armor, "armor")
+			
+			# Wait for user choice
+			var equipped = await item_drop_scene.finished
+			
+			if equipped:
+				battle_player.trocar_armadura(new_armor)
+				GameManager.armour = new_armor
+				message_label.text = "Vitória! Nova armadura equipada!"
+			else:
+				message_label.text = "Vitória! Item descartado."
+			
+		# Persist stats to GameManager (only if changed, but safe to update anyway)
+		GameManager.player_stats_backup.vitalidade = battle_player.vitalidade
+		GameManager.player_stats_backup.forca = battle_player.forca
+		GameManager.player_stats_backup.agilidade = battle_player.agilidade
+		if GameManager.player:
+			GameManager.player.vitalidade = battle_player.vitalidade
+			GameManager.player.forca = battle_player.forca
+			GameManager.player.agilidade = battle_player.agilidade
+	else:
+		message_label.text = "Vitória! Você derrotou o Slime!"
+	
 	# Victory handling
 
 	# Marcar inimigo como derrotado
 	if GameManager.current_enemy_id != "":
 		GameManager.mark_enemy_defeated(GameManager.current_enemy_id)
 	
-	message_label.text = "Vitória! Você derrotou o Slime!"
 	disable_buttons()
 	
 	# Check if still in tree before awaiting
