@@ -127,4 +127,4 @@ func _on_continue_pressed():
 	
 	# Return to map
 	GameManager.should_restore_position = true
-	get_tree().change_scene_to_file("res://maps/Map1Test.tscn")
+	get_tree().change_scene_to_file("res://maps/mapa2.tscn")

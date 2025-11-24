@@ -12,7 +12,7 @@ var enemy_max_hp : int
 # var equipamento : equipamento
 # var newEquip : equipamento
 
-var enemy_attack = 6
+var enemy_attack = 6 * GameManager.layer
 var is_defending = false
 var defense_boost = 0
 
@@ -27,6 +27,8 @@ var defense_boost = 0
 @onready var quick_attack_button = $BattleUI/ActionPanel/ActionButtons/QuickAttackButton
 @onready var defend_button = $BattleUI/ActionPanel/ActionButtons/DefendButton
 @onready var flee_button = $BattleUI/ActionPanel/ActionButtons/FleeButton
+
+@onready var sprite = $PlayerSprite
 
 func _ready():
 	# Battle ready
@@ -94,8 +96,13 @@ func create_battle_player():
 
 func create_battle_enemy():
 	# Inicializar stats do inimigo Slime
-	enemy_max_hp = 50
+	enemy_max_hp = 50 * GameManager.layer
 	enemy_hp = enemy_max_hp
+	
+	if GameManager.layer == 20:
+		enemy_max_hp = 10000
+		enemy_hp = enemy_max_hp
+		enemy_attack = 250
 	# Enemy stats initialized
 
 func multiple_agility_attacks():
@@ -271,24 +278,24 @@ func victory():
 		
 		# 5% Legendary, 10% Epic, 20% Rare, 25% Uncommon, 40% Common (Normalized to 100)
 		if rarity_roll < 5: # 5%
-			min_stat = 15
-			max_stat = 25
+			min_stat = 15 + 1 * (1.5 * GameManager.layer) 
+			max_stat = 25 + 1 * (1.5 * GameManager.layer) 
 			rarity_val = 4 # Legendary
 		elif rarity_roll < 15: # 10% (5+10)
-			min_stat = 15
-			max_stat = 20
+			min_stat = 15 + 1 * (1 * GameManager.layer) 
+			max_stat = 20 + 1 * (1 * GameManager.layer) 
 			rarity_val = 3 # Epic
 		elif rarity_roll < 35: # 20% (15+20)
-			min_stat = 10
-			max_stat = 20
+			min_stat = 10 + 1 * (0.9 * GameManager.layer) 
+			max_stat = 20 + 1 * (0.9 * GameManager.layer) 
 			rarity_val = 2 # Rare
 		elif rarity_roll < 60: # 25% (35+25)
-			min_stat = 5
-			max_stat = 15
+			min_stat = 5 + 1 * (0.7 * GameManager.layer) 
+			max_stat = 15 + 1 * (0.7 * GameManager.layer)
 			rarity_val = 1 # Uncommon
 		else: # 40% (Remaining)
-			min_stat = 5
-			max_stat = 10
+			min_stat = 5 + 1 * (0.5 * GameManager.layer)
+			max_stat = 10 + 1 * (0.5 * GameManager.layer)
 			rarity_val = 0 # Common
 			
 		# Instantiate ItemDrop screen
@@ -386,7 +393,7 @@ func return_to_map():
 	# Sinalizar que precisa restaurar posição
 	GameManager.should_restore_position = true
 	
-	get_tree().change_scene_to_file("res://maps/Map1Test.tscn")
+	get_tree().change_scene_to_file("res://maps/mapa2.tscn")
 
 func update_ui():
 	player_hp_bar.value = player_hp

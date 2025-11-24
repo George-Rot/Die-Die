@@ -1,8 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://fep85xh1qvc3"]
+[gd_scene load_steps=7 format=3 uid="uid://btuqhk2wbdjdq"]
 
-[ext_resource type="Script" uid="uid://bdwewcrpeylfq" path="res://scenes/batalha_slime.gd" id="1_0cnhg"]
-[ext_resource type="Texture2D" uid="uid://c2kxe4eii43l6" path="res://sprites/cavaleiro.jpg" id="2_fu0ps"]
-[ext_resource type="Texture2D" uid="uid://de81myhm1vhjm" path="res://scenes/slimeBostil.jpg" id="3_fu0ps"]
+[ext_resource type="Script" uid="uid://bdwewcrpeylfq" path="res://scenes/batalha_slime.gd" id="1_gpimx"]
+[ext_resource type="Texture2D" uid="uid://dar28x36s6du2" path="res://sprites/assassino.jpg" id="2_gpimx"]
+[ext_resource type="Texture2D" uid="uid://bjcjotcilpvta" path="res://scenes/slimeBoladao.jpg" id="3_pfff4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_player"]
 bg_color = Color(0.2, 0.8, 0.2, 1)
@@ -33,7 +33,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_0cnhg")
+script = ExtResource("1_gpimx")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -92,16 +92,16 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -40.0
-offset_right = -50.0
-offset_bottom = 40.0
+offset_left = -348.0
+offset_top = -34.0
+offset_right = -98.0
+offset_bottom = 46.0
 grow_horizontal = 0
 grow_vertical = 2
 
 [node name="EnemyLabel" type="Label" parent="BattleUI/TopPanel/EnemyStats"]
 layout_mode = 2
-text = "SLIME"
+text = "Ultimate Slime"
 horizontal_alignment = 1
 
 [node name="EnemyHPBar" type="ProgressBar" parent="BattleUI/TopPanel/EnemyStats"]
@@ -121,23 +121,20 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1.0
-offset_top = 155.0
-offset_right = 1.0
-offset_bottom = -195.0
+offset_top = 150.0
+offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PlayerSprite" type="Sprite2D" parent="BattleUI/BattleArea"]
-position = Vector2(195.63364, 144.28589)
-scale = Vector2(0.89134055, 0.5356499)
-texture = ExtResource("2_fu0ps")
-region_rect = Rect2(327, 6, 434, 543)
+position = Vector2(213, 147.99998)
+scale = Vector2(0.56738275, 0.52951694)
+texture = ExtResource("2_gpimx")
 
 [node name="EnemySprite" type="Sprite2D" parent="BattleUI/BattleArea"]
-position = Vector2(918.9689, 145.5)
-scale = Vector2(0.45513898, 0.5313059)
-texture = ExtResource("3_fu0ps")
+position = Vector2(917, 150)
+scale = Vector2(0.46093735, 0.5348837)
+texture = ExtResource("3_pfff4")
 
 [node name="ActionPanel" type="Panel" parent="BattleUI"]
 layout_mode = 1

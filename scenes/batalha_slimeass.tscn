@@ -1,8 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://fep85xh1qvc3"]
+[gd_scene load_steps=7 format=3 uid="uid://cjvgxxamifcwt"]
 
-[ext_resource type="Script" uid="uid://bdwewcrpeylfq" path="res://scenes/batalha_slime.gd" id="1_0cnhg"]
-[ext_resource type="Texture2D" uid="uid://c2kxe4eii43l6" path="res://sprites/cavaleiro.jpg" id="2_fu0ps"]
-[ext_resource type="Texture2D" uid="uid://de81myhm1vhjm" path="res://scenes/slimeBostil.jpg" id="3_fu0ps"]
+[ext_resource type="Script" uid="uid://bdwewcrpeylfq" path="res://scenes/batalha_slime.gd" id="1_b713p"]
+[ext_resource type="Texture2D" uid="uid://dar28x36s6du2" path="res://sprites/assassino.jpg" id="2_b713p"]
+[ext_resource type="Texture2D" uid="uid://de81myhm1vhjm" path="res://scenes/slimeBostil.jpg" id="3_e4ea2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_player"]
 bg_color = Color(0.2, 0.8, 0.2, 1)
@@ -33,7 +33,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_0cnhg")
+script = ExtResource("1_b713p")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -121,23 +121,23 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1.0
-offset_top = 155.0
-offset_right = 1.0
-offset_bottom = -195.0
+offset_left = -1.0
+offset_top = 154.0
+offset_right = -1.0
+offset_bottom = -196.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PlayerSprite" type="Sprite2D" parent="BattleUI/BattleArea"]
-position = Vector2(195.63364, 144.28589)
-scale = Vector2(0.89134055, 0.5356499)
-texture = ExtResource("2_fu0ps")
+position = Vector2(277.70508, 146.07568)
+scale = Vector2(0.54159176, 0.5297878)
+texture = ExtResource("2_b713p")
 region_rect = Rect2(327, 6, 434, 543)
 
 [node name="EnemySprite" type="Sprite2D" parent="BattleUI/BattleArea"]
-position = Vector2(918.9689, 145.5)
-scale = Vector2(0.45513898, 0.5313059)
-texture = ExtResource("3_fu0ps")
+position = Vector2(913, 144.00002)
+scale = Vector2(0.45318592, 0.5349955)
+texture = ExtResource("3_e4ea2")
 
 [node name="ActionPanel" type="Panel" parent="BattleUI"]
 layout_mode = 1

@@ -22,6 +22,31 @@ func setup(current, dropped, type):
 	var current_text = ""
 	var new_text = ""
 	
+	var craridade = ""
+	var raridade = ""
+	
+	
+	match current.raridade:
+		0:
+			craridade = "comum"
+		1:
+			craridade = "incomum"
+		2:
+			craridade = "raro"
+		3:
+			craridade = "lendario"
+	
+	match dropped.raridade:
+		0:
+			raridade = "comum"
+		1:
+			raridade = "incomum"
+		2:
+			raridade = "raro"
+		3:
+			raridade = "lendario"
+	
+	
 	if type == "weapon":
 		title_label.text = "Nova Arma Encontrada!"
 		if current:

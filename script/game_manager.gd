@@ -3,6 +3,11 @@ var player : Player
 var enemy : Enemy
 var xp = 0
 
+var selectedClass : int
+
+var killCount = 0
+var totalKill = 0
+
 var equip : equipamento
 var armour : armadura
 

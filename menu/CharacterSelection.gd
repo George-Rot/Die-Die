@@ -9,14 +9,16 @@ func _ready():
 func _on_knight_selected():
 	print("Cavaleiro selecionado!")
 	select_character(0)  # Cavaleiro = tipo 0
+	GameManager.selectedClass = 0
 
 func _on_archer_selected():
 	print("Arqueiro selecionado!")
 	select_character(1)  # Arqueiro = tipo 1
-
+	GameManager.selectedClass = 1
 func _on_rogue_selected():
 	print("Bandido selecionado!")
 	select_character(2)  # Bandido = tipo 2
+	GameManager.selectedClass = 2
 
 func select_character(character_type: int):
 	# Create new player instance with selected character type
@@ -41,7 +43,7 @@ func select_character(character_type: int):
 	print("Vida inicial: %d HP" % new_player.vida)
 	
 	# Start the game
-	get_tree().change_scene_to_file("res://maps/Map1Test.tscn")
+	get_tree().change_scene_to_file("res://maps/mapa2.tscn")
 
 func _on_back_pressed():
 	# Return to main menu

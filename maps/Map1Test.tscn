@@ -1,7 +1,7 @@
-[gd_scene load_steps=32 format=4 uid="uid://dlh4fxiwhju2u"]
+[gd_scene load_steps=32 format=4 uid="uid://dun21l6fstixp"]
 
 [ext_resource type="Texture2D" uid="uid://8shfugikbph5" path="res://3booodpro's First Asset/Separated/3boood_pro.png" id="1_0buqd"]
-[ext_resource type="Script" uid="uid://13wlu43cguf" path="res://maps/Map1Test.gd" id="1_f8h2k"]
+[ext_resource type="Script" path="res://maps/Map1Test.gd" id="1_f8h2k"]
 [ext_resource type="Script" uid="uid://cf3ltbjokykvg" path="res://script/enemy.gd" id="2_enemy"]
 [ext_resource type="Texture2D" uid="uid://4d0r80pjik4s" path="res://3booodpro's First Asset/Separated/Slime.png" id="2_rp23u"]
 [ext_resource type="Texture2D" uid="uid://b3yelpjta0lxd" path="res://3booodpro's First Asset/TilesetSheet.png" id="3_bgdju"]
@@ -255,7 +255,7 @@ b = Vector2(21, 487)
 a = Vector2(702, 444)
 b = Vector2(699, 18)
 
-[node name="SimpleMap1Test" type="Node2D"]
+[node name="SimpleMap1Test2" type="Node2D"]
 script = ExtResource("1_f8h2k")
 
 [node name="Player" type="CharacterBody2D" parent="."]

@@ -100,8 +100,22 @@ func handle_movement():
 			# Salva dados no singleton antes de trocar de cena
 			GameManager.save_player_for_battle(self)
 			GameManager.enemy = collider
-
-			get_tree().change_scene_to_file("res://scenes/batalha_slime.tscn")
+			if GameManager.layer != 20:
+				match GameManager.selectedClass:
+					0:
+						get_tree().change_scene_to_file("res://scenes/batalha_slime.tscn")
+					1:
+						get_tree().change_scene_to_file("res://scenes/batalha_slimearq.tscn")
+					2:
+						get_tree().change_scene_to_file("res://scenes/batalha_slimeass.tscn")
+			else:
+				match GameManager.selectedClass:
+					0:
+						get_tree().change_scene_to_file("res://scenes/batalhaFinal.tscn")
+					1:
+						get_tree().change_scene_to_file("res://scenes/batalhaFinalarq.tscn")
+					2:
+						get_tree().change_scene_to_file("res://scenes/batalhaFinalass.tscn")
 
 func handle_animation():
 	# Animar baseado na velocidade
