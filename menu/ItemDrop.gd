@@ -11,6 +11,18 @@ signal finished(equipped)
 var new_item
 var item_type = "" # "weapon" or "armor"
 
+func _rarity_label(value):
+	match value:
+		0:
+			return "comum"
+		1:
+			return "incomum"
+		2:
+			return "raro"
+		3:
+			return "lendario"
+	return "desconhecida"
+
 func _ready():
 	equip_button.pressed.connect(_on_equip_pressed)
 	discard_button.pressed.connect(_on_discard_pressed)
@@ -18,52 +30,27 @@ func _ready():
 func setup(current, dropped, type):
 	new_item = dropped
 	item_type = type
-	
+
 	var current_text = ""
 	var new_text = ""
-	
-	var craridade = ""
-	var raridade = ""
-	
-	
-	match current.raridade:
-		0:
-			craridade = "comum"
-		1:
-			craridade = "incomum"
-		2:
-			craridade = "raro"
-		3:
-			craridade = "lendario"
-	
-	match dropped.raridade:
-		0:
-			raridade = "comum"
-		1:
-			raridade = "incomum"
-		2:
-			raridade = "raro"
-		3:
-			raridade = "lendario"
-	
-	
+
 	if type == "weapon":
 		title_label.text = "Nova Arma Encontrada!"
 		if current:
-			current_text = "Força: %d\nAgilidade: %d\nVitalidade: %d\nRaridade: %d" % [current.forca, current.agilidade, current.vitalidade, current.raridade]
+			current_text = "Força: %d\nAgilidade: %d\nRaridade: %s" % [current.forca, current.agilidade, _rarity_label(current.raridade)]
 		else:
 			current_text = "Nenhum"
-			
-		new_text = "Força: %d\nAgilidade: %d\nVitalidade: %d\nRaridade: %d" % [dropped.forca, dropped.agilidade, dropped.vitalidade, dropped.raridade]
-		
+
+		new_text = "Força: %d\nAgilidade: %d\nRaridade: %s" % [dropped.forca, dropped.agilidade, _rarity_label(dropped.raridade)]
+
 	elif type == "armor":
 		title_label.text = "Nova Armadura Encontrada!"
 		if current:
-			current_text = "Vitalidade: %d\nAgilidade: %d\nRaridade: %d" % [current.vitalidade, current.agilidade, current.raridade]
+			current_text = "Vitalidade: %d\nAgilidade: %d\nRaridade: %s" % [current.vitalidade, current.agilidade, _rarity_label(current.raridade)]
 		else:
 			current_text = "Nenhum"
-			
-		new_text = "Vitalidade: %d\nAgilidade: %d\nRaridade: %d" % [dropped.vitalidade, dropped.agilidade, dropped.raridade]
+
+		new_text = "Vitalidade: %d\nAgilidade: %d\nRaridade: %s" % [dropped.vitalidade, dropped.agilidade, _rarity_label(dropped.raridade)]
 
 	current_stats_label.text = current_text
 	new_stats_label.text = new_text
